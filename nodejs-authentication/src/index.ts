@@ -41,9 +41,6 @@ app.post("/register", async (req, res) => {
       password: hashedPassword,
     });
 
-    const accessToken = generateTokens(user._id.toString());
-    const refreshToken = generateTokens(user._id.toString());
-
     return res.status(201).send({
       email,
       tokens: generateTokens(user._id.toString()),
