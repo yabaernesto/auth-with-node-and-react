@@ -5,10 +5,19 @@ import bcrypt from "bcryptjs";
 import "./database";
 import { UserModel } from "./database";
 import { generateTokens, isEmailValid, isPasswordValid } from "./helpers";
+import { authMiddleware } from "./middlewares";
 
 const app = express();
 
 app.use(express.json());
+
+app.get("/profile", authMiddleware, async (req, res) => {
+  const user = await UserModel.findOne({
+    _id: req.user.userId,
+  });
+
+  return res.json({ user });
+});
 
 app.post("/register", async (req, res) => {
   try {

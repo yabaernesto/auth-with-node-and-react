@@ -7,7 +7,7 @@ export const isPasswordValid = (password: string) => password.length >= 6;
 
 export const generateTokens = (userId: string) => {
   if (!process.env.JWT_SECRET || !process.env.JWT_SECRET_REFRESH) {
-    throw new Error("Variables not found!");
+    throw new Error("Environment Variables not found!");
   }
 
   const accessToken = jwt.sign(
