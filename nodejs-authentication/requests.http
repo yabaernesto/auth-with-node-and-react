@@ -5,3 +5,13 @@ content-type: application/json
   "email": "yaba.ernesto@gmail.com",
   "password": "123456"
 }
+
+###
+
+POST http://localhost:8080/login
+content-type: application/json
+
+{
+  "email": "yaba.ernesto@gmail.com",
+  "password": "123456"
+}

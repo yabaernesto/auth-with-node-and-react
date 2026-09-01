@@ -46,10 +46,7 @@ app.post("/register", async (req, res) => {
 
     return res.status(201).send({
       email,
-      tokens: {
-        accessToken,
-        refreshToken,
-      },
+      tokens: generateTokens(user._id.toString()),
     });
   } catch (error) {
     console.error(error);
@@ -81,15 +78,9 @@ app.post("/login", async (req, res) => {
       });
     }
 
-    const accessToken = generateTokens(user._id.toString());
-    const refreshToken = generateTokens(user._id.toString());
-
     return res.status(200).send({
       email,
-      tokens: {
-        accessToken,
-        refreshToken,
-      },
+      tokens: generateTokens(user._id.toString()),
     });
   } catch (error) {
     console.error(error);
