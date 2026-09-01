@@ -1,0 +1,104 @@
+import "dotenv/config";
+import express from "express";
+import bcrypt from "bcryptjs";
+
+import "./database";
+import { UserModel } from "./database";
+import { generateTokens, isEmailValid, isPasswordValid } from "./helpers";
+
+const app = express();
+
+app.use(express.json());
+
+app.post("/register", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!isEmailValid(email)) {
+      return res.status(404).send({
+        message: "Invalid email",
+      });
+    }
+
+    if (!isPasswordValid(password)) {
+      return res.status(404).send({
+        message: "Invalid password",
+      });
+    }
+
+    const userAlreadyExists = await UserModel.findOne({
+      email,
+    });
+
+    const hashedPassword = bcrypt.hashSync(password, 10);
+
+    if (userAlreadyExists) {
+      throw new Error("User already exists.");
+    }
+
+    const user = await UserModel.create({
+      email,
+      password: hashedPassword,
+    });
+
+    const accessToken = generateTokens(user._id.toString());
+    const refreshToken = generateTokens(user._id.toString());
+
+    return res.status(201).send({
+      email,
+      tokens: {
+        accessToken,
+        refreshToken,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({
+      message: "Internal server error",
+    });
+  }
+});
+
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await UserModel.findOne({
+      email,
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid email or password",
+      });
+    }
+
+    const isPasswordValid = bcrypt.compare(password, user.password!);
+
+    if (!isPasswordValid) {
+      return res.status(400).json({
+        message: "Invalid email or password",
+      });
+    }
+
+    const accessToken = generateTokens(user._id.toString());
+    const refreshToken = generateTokens(user._id.toString());
+
+    return res.status(200).send({
+      email,
+      tokens: {
+        accessToken,
+        refreshToken,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({
+      message: "Internal server error",
+    });
+  }
+});
+
+app.listen(8080, () => {
+  console.log("Server is running on http://localhost:8080");
+});
