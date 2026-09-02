@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import bcrypt from "bcryptjs";
+import jwt, { JsonWebTokenError } from "jsonwebtoken";
 
 import "./database";
 import { UserModel } from "./database";
@@ -84,13 +85,43 @@ app.post("/login", async (req, res) => {
       });
     }
 
-    return res.status(200).send({
+    return res.status(200).json({
       email,
       tokens: generateTokens(user._id.toString()),
     });
   } catch (error) {
     console.error(error);
     return res.status(500).send({
+      message: "Internal server error",
+    });
+  }
+});
+
+app.post("/refresh-token", (req, res) => {
+  try {
+    if (!process.env.JWT_SECRET_REFRESH) {
+      throw new Error("Environment Variables not found!");
+    }
+
+    const { refreshToken } = req.body;
+
+    const tokenPayload = jwt.verify(
+      refreshToken,
+      process.env.JWT_SECRET_REFRESH,
+    ) as { userId: string };
+
+    const tokens = generateTokens(tokenPayload.userId);
+
+    return res.status(200).json(tokens);
+  } catch (error) {
+    console.error(error);
+    if (error instanceof JsonWebTokenError) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+
+    return res.status(500).json({
       message: "Internal server error",
     });
   }

@@ -19,4 +19,13 @@ content-type: application/json
 ###
 
 GET http://localhost:8080/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTk2ZGUyOWI0NWY2ODY2NmY5YzljODIiLCJpYXQiOjE3ODgyODUzNjIsImV4cCI6MTc4ODI4NjI2Mn0.1cvSPacORR_sUXOzub39B8EgGekB_fSRyYAlxPIP8Nw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTk2ZGUyOWI0NWY2ODY2NmY5YzljODIiLCJpYXQiOjE3ODgzNTA0NzAsImV4cCI6MTc4ODM1MTM3MH0.KQ8cfI-XwouhVLw8YMxpEwDSYVHhmO8rKyQ1_UeAnD4
+
+###
+
+POST http://localhost:8080/refresh-token
+content-type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTk2ZGUyOWI0NWY2ODY2NmY5YzljODIiLCJpYXQiOjE3ODgzNTA1MTAsImV4cCI6MTc5MDk0MjUxMH0.uYGpHh1bKK_csWLyXliAKjj2fuO3eX20sOI4vlj_oVc"
+}
