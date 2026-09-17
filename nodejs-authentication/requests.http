@@ -2,8 +2,11 @@ POST http://localhost:8080/register
 content-type: application/json
 
 {
-  "email": "yaba.ernesto@gmail.com",
-  "password": "123456"
+  "email": "yabaernesto@gmail.com",
+  "password": "123456",
+  "firstName": "Yaba",
+  "lastName": "Ernesto",
+  "age": 25
 }
 
 ###
@@ -19,7 +22,7 @@ content-type: application/json
 ###
 
 GET http://localhost:8080/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YTk2ZGUyOWI0NWY2ODY2NmY5YzljODIiLCJpYXQiOjE3ODgzNTA0NzAsImV4cCI6MTc4ODM1MTM3MH0.KQ8cfI-XwouhVLw8YMxpEwDSYVHhmO8rKyQ1_UeAnD4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWFiZmM3ZmRhNDk2YWQ1YWVlZjZmOWMiLCJpYXQiOjE3ODk2NTYxOTIsImV4cCI6MTc4OTY1NzA5Mn0.muxR5YhrBc3p22xJ8hwqUtwQER-FTNasB8KP3iENrig
 
 ###
 

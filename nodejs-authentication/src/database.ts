@@ -23,6 +23,18 @@ export const userSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  firstName: {
+    type: String,
+    require: true,
+  },
+  lastName: {
+    type: String,
+    require: true,
+  },
+  age: {
+    type: Number,
+    require: true,
+  },
 });
 
 export const UserModel = mongoose.model("Use", userSchema);

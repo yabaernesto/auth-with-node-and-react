@@ -24,7 +24,7 @@ app.get("/profile", authMiddleware, async (req, res) => {
 
 app.post("/register", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { firstName, lastName, age, email, password } = req.body;
 
     if (!isEmailValid(email)) {
       return res.status(404).send({
@@ -51,6 +51,9 @@ app.post("/register", async (req, res) => {
     const user = await UserModel.create({
       email,
       password: hashedPassword,
+      firstName,
+      lastName,
+      age,
     });
 
     return res.status(201).send({
