@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import bcrypt from "bcryptjs";
 import jwt, { JsonWebTokenError } from "jsonwebtoken";
+import cors from "cors";
 
 import "./database";
 import { UserModel } from "./database";
@@ -11,6 +12,7 @@ import { authMiddleware } from "./middlewares";
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 app.get("/profile", authMiddleware, async (req, res) => {
   const user = await UserModel.findOne({
