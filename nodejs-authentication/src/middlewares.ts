@@ -11,7 +11,15 @@ export const authMiddleware = (
   }
 
   try {
-    const accessToken = req.headers.authorization?.split("Bearer ")[1];
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader?.startsWith("Bearer ")) {
+      return res.status(401).send({
+        message: "Unauthorized",
+      });
+    }
+
+    const accessToken = authHeader.split(" ")[1];
 
     if (!accessToken) {
       return res.status(401).send({
