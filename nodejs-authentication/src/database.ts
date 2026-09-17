@@ -37,6 +37,6 @@ export const userSchema = new mongoose.Schema({
   },
 });
 
-export const UserModel = mongoose.model("Use", userSchema);
+export const UserModel = mongoose.model("User", userSchema);
 
 connect();
