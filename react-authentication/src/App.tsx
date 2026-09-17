@@ -1,35 +1,72 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import axios from "axios";
+import { useState, type SubmitEvent } from "react";
+
+type ResponsePayload = {
+  tokens: {
+    accessToken: string;
+    refreshToken: string;
+  };
+};
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post<ResponsePayload>(
+        "http://localhost:8080/login",
+        {
+          email,
+          password,
+        },
+      );
+      const accessToken = response.data.tokens.accessToken;
+      const refreshToken = response.data.tokens.refreshToken;
+
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+
+      alert("Seja bem-vindo");
+      setEmail("");
+      setPassword("");
+    } catch (error) {
+      alert("Login Failed!");
+      console.error(error);
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    <div className="h-screen w-full flex items-center justify-center bg-slate-800">
+      <form onSubmit={handleSubmit} className="flex flex-col w-md space-y-2">
+        <input
+          className="bg-slate-700 text-white border border-gray-500 p-2 w-full rounded-md"
+          type="email"
+          placeholder="e-mail"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <input
+          className="bg-slate-700 text-white border border-gray-500 p-2 w-full"
+          type="password"
+          placeholder="Informe sua senha"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <button
+          className="
+          bg-emerald-700 border-none text-white border border-gray-500 p-2 cursor-pointer rounded-md hover:bg-emerald-600
+          "
+        >
+          Acessar
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      </form>
+    </div>
+  );
 }
 
-export default App
+export default App;
