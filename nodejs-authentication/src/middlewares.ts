@@ -39,7 +39,7 @@ export const authMiddleware = (
     console.error(error);
     if (error instanceof JsonWebTokenError) {
       return res.status(401).send({
-        message: "Unauthorized!",
+        message: "Invalid token!",
       });
     }
 
