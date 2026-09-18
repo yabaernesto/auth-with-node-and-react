@@ -25,25 +25,27 @@ const Profile = () => {
     fetchUser();
   }, []);
 
-  const logout = () => {
+  const handleSignOut = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
   };
 
   return (
     <div className="h-screen w-full flex flex-col items-center justify-center bg-slate-800 text-white">
-      <h1>Bem-vindo!</h1>
-      <p>Primeiro nome: {user?.firstName}</p>
-      <p>Sobrenome: {user?.lastName}</p>
-      <p>e-mail: {user?.email}</p>
-      <p>Idade: {user?.age}</p>
+      <div className="w-md">
+        <h1>Bem-vindo!</h1>
+        <p>Primeiro nome: {user?.firstName}</p>
+        <p>Sobrenome: {user?.lastName}</p>
+        <p>e-mail: {user?.email}</p>
+        <p>Idade: {user?.age}</p>
 
-      <button
-        onClick={logout}
-        className="bg-red-500 text-white font-bold py-2 px-4"
-      >
-        Sair
-      </button>
+        <button
+          onClick={handleSignOut}
+          className="bg-red-500 text-white font-bold py-2 px-4"
+        >
+          Sair
+        </button>
+      </div>
     </div>
   );
 };

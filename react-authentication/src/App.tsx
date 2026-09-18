@@ -19,6 +19,13 @@ function App() {
   useEffect(() => {
     const init = async () => {
       try {
+        const accessToken = localStorage.getItem("accessToken");
+        const refreshToken = localStorage.getItem("refreshToken");
+
+        if (!accessToken && !refreshToken) {
+          return;
+        }
+
         await api.get("/profile");
 
         setIsAuthenticated(true);
