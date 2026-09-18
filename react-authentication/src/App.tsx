@@ -1,5 +1,7 @@
-import axios from "axios";
-import { useState, type SubmitEvent } from "react";
+import { useEffect, useState, type SubmitEvent } from "react";
+
+import Profile from "./components/profile";
+import { api } from "./lib/axios";
 
 type ResponsePayload = {
   tokens: {
@@ -11,32 +13,58 @@ type ResponsePayload = {
 function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
+
+  useEffect(() => {
+    const init = async () => {
+      try {
+        await api.get("/profile");
+
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsInitializing(false);
+      }
+    };
+
+    init();
+  }, []);
 
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post<ResponsePayload>(
-        "http://localhost:8080/login",
-        {
-          email,
-          password,
-        },
-      );
+      const response = await api.post<ResponsePayload>("/login", {
+        email,
+        password,
+      });
       const accessToken = response.data.tokens.accessToken;
       const refreshToken = response.data.tokens.refreshToken;
 
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
 
-      alert("Seja bem-vindo");
       setEmail("");
       setPassword("");
+
+      setIsAuthenticated(true);
+
+      alert("Seja bem-vindo");
     } catch (error) {
       alert("Login Failed!");
       console.error(error);
     }
   };
+
+  if (isInitializing) {
+    return null;
+  }
+
+  if (isAuthenticated) {
+    return <Profile />;
+  }
 
   return (
     <div className="h-screen w-full flex items-center justify-center bg-slate-800">
