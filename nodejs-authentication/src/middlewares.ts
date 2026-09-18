@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { JsonWebTokenError } from "jsonwebtoken";
 
 export const authMiddleware = (
   req: Request,
@@ -37,6 +37,12 @@ export const authMiddleware = (
     next();
   } catch (error) {
     console.error(error);
+    if (error instanceof JsonWebTokenError) {
+      return res.status(401).send({
+        message: "Unauthorized!",
+      });
+    }
+
     return res.status(500).send({
       message: "Internal server error",
     });
